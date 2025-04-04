@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 
+// Predefined static responses for common finance questions
 const staticResponses = {
   "How do I budget on a low income?": "Try the 50/30/20 rule: 50% for needs, 30% for wants, 20% for savings. Track every expense and avoid impulse buys.",
   "How can I reduce unnecessary spending?": "Start by tracking all spending, then identify recurring costs that can be reduced (e.g. subscriptions, takeout). Use cash instead of cards for better control.",
@@ -9,25 +10,33 @@ const staticResponses = {
 };
 
 function App() {
+  // State for dropdown query and AI-like response
   const [query, setQuery] = useState("");
   const [response, setResponse] = useState("");
 
+  // Load expenses from localStorage on mount
   const [expenses, setExpenses] = useState(() => {
     const saved = localStorage.getItem("expenses");
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Controlled form for new expense entry
   const [newExpense, setNewExpense] = useState({ description: "", amount: "", category: "Food" });
+
+  // Default budget set at £500
   const [budget, setBudget] = useState(500);
 
+  // Update localStorage whenever expenses change
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
 
+  // Match selected question to static response
   const handleAsk = () => {
     setResponse(staticResponses[query] || "Please select a supported question from the dropdown.");
   };
 
+  // Add new expense to the list
   const handleExpenseSubmit = (e) => {
     e.preventDefault();
     if (!newExpense.description || !newExpense.amount) return;
@@ -36,6 +45,7 @@ function App() {
     setNewExpense({ description: "", amount: "", category: "Food" });
   };
 
+  // Format data for pie chart based on category totals
   const pieData = Object.entries(
     expenses.reduce((acc, curr) => {
       acc[curr.category] = (acc[curr.category] || 0) + curr.amount;
@@ -49,7 +59,7 @@ function App() {
     <div style={{ maxWidth: "600px", margin: "auto", padding: "2rem" }}>
       <h1>💰 Finance Assistant</h1>
 
-      {/* Static Q&A Section */}
+      {/* Budgeting Tips Section */}
       <label><strong>Select a budgeting question:</strong></label>
       <select
         value={query}
@@ -68,11 +78,11 @@ function App() {
         <p>{response}</p>
       </div>
 
-      {/* Expense Tracker */}
+      {/* Expense Tracking Section */}
       <hr style={{ margin: "2rem 0" }} />
       <h2>📋 Track Your Expenses</h2>
 
-      {/* Budget input */}
+      {/* Budget Input Field */}
       <div style={{ marginBottom: "1rem" }}>
         <label><strong>Set Your Budget: £</strong></label>
         <input
@@ -83,6 +93,7 @@ function App() {
         />
       </div>
 
+      {/* Expense Entry Form */}
       <form onSubmit={handleExpenseSubmit}>
         <input
           type="text"
@@ -112,6 +123,7 @@ function App() {
         <button type="submit">Add</button>
       </form>
 
+      {/* Budget Warning */}
       <div style={{ marginTop: "1rem", fontWeight: "bold" }}>
         Total Spent: £{expenses.reduce((acc, item) => acc + item.amount, 0).toFixed(2)}
       </div>
@@ -122,6 +134,7 @@ function App() {
         </div>
       )}
 
+      {/* Display Expense List */}
       <ul style={{ marginTop: "1rem" }}>
         {expenses.map((exp, index) => (
           <li key={index}>
@@ -130,7 +143,7 @@ function App() {
         ))}
       </ul>
 
-      {/* Pie Chart */}
+      {/* Chart Visualization */}
       {expenses.length > 0 && (
         <div style={{ marginTop: "2rem" }}>
           <h3>📊 Spending Breakdown</h3>

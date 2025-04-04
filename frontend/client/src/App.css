@@ -1,3 +1,4 @@
+/* Main app container */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,12 +6,15 @@
   text-align: center;
 }
 
+/* Logo styling with hover transition */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
+/* Default and React-specific hover effects */
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
@@ -18,6 +22,7 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* Spin animation definition */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -27,16 +32,19 @@
   }
 }
 
+/* Conditional animation for users without motion preferences */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Basic card layout */
 .card {
   padding: 2em;
 }
 
+/* Secondary/help text styling */
 .read-the-docs {
   color: #888;
 }
